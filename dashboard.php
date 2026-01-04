@@ -1,148 +1,59 @@
 <?php
-/**
- * Dashboard Dosen View
- * Halaman dashboard khusus untuk dosen
- */
-
-$page_title = $page_title ?? 'Dashboard Dosen';
-$user = $user ?? [];
-$stats = $stats ?? [];
-$active_menu = $active_menu ?? 'dashboard';
+// Student Dashboard
 ?>
 
 <div class="container-fluid">
     <!-- Page Header -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">
-            <i class="fas fa-tachometer-alt"></i> Dashboard Dosen
-        </h1>
-        <div class="text-muted">
-            <i class="fas fa-clock"></i> <?= date('d F Y, H:i') ?>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0 text-gray-800">
+                <i class="bi bi-speedometer2 me-2"></i>Dashboard Mahasiswa
+            </h1>
+            <p class="mb-0 text-muted">Selamat datang di portal mahasiswa APAO</p>
+        </div>
+        <div class="btn-toolbar">
+            <a href="/student/announcements" class="btn btn-primary">
+                <i class="bi bi-megaphone me-1"></i>Lihat Pengumuman
+            </a>
         </div>
     </div>
 
-    <!-- Welcome Card -->
-    <div class="row">
-        <div class="col-12">
-            <div class="card border-left-primary shadow mb-4">
+    <!-- Stats Cards -->
+    <div class="row mb-4">
+        <div class="col-xl-6 col-md-6 mb-3">
+            <div class="card border-left-primary shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Selamat Datang
+                                Pengumuman Baru
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                <?= htmlspecialchars($user['full_name'] ?? $user['username'] ?? 'Dosen') ?>
+                                <?php echo $stats['new_announcements'] ?? 0; ?>
                             </div>
-                            <div class="text-muted">
-                                <i class="fas fa-user-tie"></i> Dosen
-                                <?php if (isset($stats['user_info']['program_studi']) && !empty($stats['user_info']['program_studi'])): ?>
-                                    | <?= htmlspecialchars($stats['user_info']['program_studi']) ?>
-                                <?php endif; ?>
-                            </div>
-                            <?php if (isset($stats['academic_status'])): ?>
-                                <div class="mt-2">
-                                    <span class="badge badge-<?= $stats['academic_status'] === 'Aktif' ? 'success' : 'warning' ?>">
-                                        Status: <?= htmlspecialchars($stats['academic_status']) ?>
-                                    </span>
-                                </div>
-                            <?php endif; ?>
                         </div>
-                        <div class="col-auto">
-                            <i class="fas fa-user-graduate fa-2x text-gray-300"></i>
+                        <div class="col-auto d-none d-md-block">
+                            <i class="bi bi-bell fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- Statistics Cards -->
-    <div class="row">
-        <!-- Total Pengumuman Saya -->
-        <div class="col-xl-3 col-md-6 mb-4">
+        
+        <div class="col-xl-6 col-md-6 mb-3">
             <div class="card border-left-success shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Pengumuman Saya
+                                Total Pengumuman
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                <?= $stats['my_total_announcements'] ?? 0 ?>
+                                <?php echo $stats['total_announcements'] ?? 0; ?>
                             </div>
                         </div>
-                        <div class="col-auto">
-                            <i class="fas fa-bullhorn fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Quick Actions -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-info shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                Aksi Cepat
-                            </div>
-                            <div class="mt-2">
-                                <a href="/dosen/announcements/create" class="btn btn-info btn-sm">
-                                    <i class="fas fa-plus"></i> Buat Pengumuman
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-plus-circle fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Profile Status -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-warning shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                Profil
-                            </div>
-                            <div class="mt-2">
-                                <a href="/dosen/profile" class="btn btn-warning btn-sm">
-                                    <i class="fas fa-user-edit"></i> Edit Profil
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-user-cog fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Menu Pengumuman -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-secondary shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">
-                                Kelola Pengumuman
-                            </div>
-                            <div class="mt-2">
-                                <a href="/dosen/announcements" class="btn btn-secondary btn-sm">
-                                    <i class="fas fa-list"></i> Lihat Semua
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                        <div class="col-auto d-none d-md-block">
+                            <i class="bi bi-megaphone fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
@@ -150,148 +61,212 @@ $active_menu = $active_menu ?? 'dashboard';
         </div>
     </div>
 
-    <!-- Recent Announcements -->
-    <?php if (isset($stats['recent_announcements']) && !empty($stats['recent_announcements'])): ?>
     <div class="row">
-        <div class="col-12">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <!-- Quick Access -->
+        <div class="col-lg-4 col-md-6 mb-4 order-lg-1 order-2">
+            <div class="card shadow">
+                <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-primary">
-                        <i class="fas fa-newspaper"></i> Pengumuman Terbaru
+                        <i class="bi bi-lightning me-2"></i>Akses Cepat
                     </h6>
-                    <a href="/dosen/announcements" class="btn btn-primary btn-sm">
-                        <i class="fas fa-eye"></i> Lihat Semua
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="/student/announcements" class="btn btn-primary">
+                            <i class="bi bi-megaphone me-2"></i>Semua Pengumuman
+                        </a>
+                        <a href="/student/announcements?category=akademik" class="btn btn-success">
+                            <i class="bi bi-mortarboard me-2"></i>Pengumuman Akademik
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categories -->
+            <div class="card shadow mt-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-success">
+                        <i class="bi bi-tags me-2"></i>Kategori Pengumuman
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="list-group list-group-flush">
+                        <a href="/student/announcements?category=akademik" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                            <div>
+                                <i class="bi bi-mortarboard me-2 text-primary"></i>
+                                Akademik
+                            </div>
+                            <span class="badge bg-primary rounded-pill"><?php echo $stats['categories']['akademik'] ?? 0; ?></span>
+                        </a>
+                        <a href="/student/announcements?category=beasiswa" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                            <div>
+                                <i class="bi bi-award me-2 text-success"></i>
+                                Beasiswa
+                            </div>
+                            <span class="badge bg-success rounded-pill"><?php echo $stats['categories']['beasiswa'] ?? 0; ?></span>
+                        </a>
+                        <a href="/student/announcements?category=acara" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                            <div>
+                                <i class="bi bi-calendar-event me-2 text-info"></i>
+                                Acara
+                            </div>
+                            <span class="badge bg-info rounded-pill"><?php echo $stats['categories']['acara'] ?? 0; ?></span>
+                        </a>
+                        <a href="/student/announcements?category=administrasi" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                            <div>
+                                <i class="bi bi-file-text me-2 text-warning"></i>
+                                Administrasi
+                            </div>
+                            <span class="badge bg-warning rounded-pill"><?php echo $stats['categories']['administrasi'] ?? 0; ?></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Announcements -->
+        <div class="col-lg-8 col-md-6 mb-4 order-lg-2 order-1">
+            <div class="card shadow">
+                <div class="card-header py-3 d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+                    <h6 class="m-0 font-weight-bold text-primary mb-2 mb-md-0">
+                        <i class="bi bi-clock-history me-2"></i>Pengumuman Terbaru
+                    </h6>
+                    <a href="/student/announcements" class="btn btn-sm btn-primary">
+                        Lihat Semua
                     </a>
                 </div>
                 <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered" width="100%" cellspacing="0">
-                            <thead>
-                                <tr>
-                                    <th>Judul</th>
-                                    <th>Penulis</th>
-                                    <th>Prioritas</th>
-                                    <th>Tanggal</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach (array_slice($stats['recent_announcements'], 0, 5) as $announcement): ?>
-                                <tr>
-                                    <td>
-                                        <strong><?= htmlspecialchars($announcement['title']) ?></strong>
-                                        <?php if (strlen($announcement['content']) > 100): ?>
-                                            <br><small class="text-muted">
-                                                <?= htmlspecialchars(substr(strip_tags($announcement['content']), 0, 100)) ?>...
-                                            </small>
-                                        <?php endif; ?>
-                                    </td>
-                                    <td><?= htmlspecialchars($announcement['author_name'] ?? 'Unknown') ?></td>
-                                    <td>
-                                        <?php
-                                        $priority_class = '';
-                                        $priority_text = '';
-                                        switch($announcement['priority']) {
-                                            case 'high':
-                                                $priority_class = 'badge-danger';
-                                                $priority_text = 'Tinggi';
-                                                break;
-                                            case 'medium':
-                                                $priority_class = 'badge-warning';
-                                                $priority_text = 'Sedang';
-                                                break;
-                                            case 'low':
-                                                $priority_class = 'badge-info';
-                                                $priority_text = 'Rendah';
-                                                break;
-                                            default:
-                                                $priority_class = 'badge-secondary';
-                                                $priority_text = 'Normal';
-                                        }
-                                        ?>
-                                        <span class="badge <?= $priority_class ?>"><?= $priority_text ?></span>
-                                    </td>
-                                    <td>
-                                        <small>
-                                            <?= date('d/m/Y H:i', strtotime($announcement['created_at'])) ?>
-                                        </small>
-                                    </td>
-                                    <td>
-                                        <?php if ($announcement['is_active']): ?>
-                                            <span class="badge badge-success">Aktif</span>
-                                        <?php else: ?>
-                                            <span class="badge badge-secondary">Nonaktif</span>
-                                        <?php endif; ?>
-                                    </td>
-                                </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
+                    <?php if (!empty($stats['recent_announcements'])): ?>
+                        <div class="timeline">
+                            <?php foreach ($stats['recent_announcements'] as $index => $announcement): ?>
+                            <div class="timeline-item">
+                                <div class="timeline-marker bg-<?php echo ['primary', 'success', 'info', 'warning'][$index % 4]; ?>">
+                                    <i class="bi bi-megaphone"></i>
+                                </div>
+                                <div class="timeline-content">
+                                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start mb-2">
+                                        <h6 class="mb-1 mb-md-0">
+                                            <a href="/announcements/<?php echo $announcement['id']; ?>" class="text-decoration-none">
+                                                <?php echo htmlspecialchars($announcement['title']); ?>
+                                            </a>
+                                        </h6>
+                                        <small class="text-muted"><?php echo date('d/m/Y H:i', strtotime($announcement['publish_date'])); ?></small>
+                                    </div>
+                                    <p class="mb-2 text-muted">
+                                        <?php echo htmlspecialchars(substr(strip_tags($announcement['content']), 0, 150)); ?>...
+                                    </p>
+                                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+                                        <div class="mb-2 mb-md-0">
+                                            <span class="badge bg-secondary me-2"><?php echo htmlspecialchars($announcement['category_name'] ?? 'Umum'); ?></span>
+                                            <span class="badge bg-<?php echo $announcement['priority'] === 'urgent' ? 'danger' : ($announcement['priority'] === 'high' ? 'warning' : 'info'); ?>">
+                                                <?php echo ucfirst($announcement['priority'] ?? 'medium'); ?>
+                                            </span>
+                                        </div>
+                                        <div class="btn-group" role="group">
+                                            <a href="/announcements/<?php echo $announcement['id']; ?>" class="btn btn-sm btn-outline-primary">
+                                                <i class="bi bi-eye me-1"></i>Baca
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php else: ?>
+                        <div class="text-center py-4">
+                            <i class="bi bi-megaphone text-muted" style="font-size: 3rem;"></i>
+                            <p class="text-muted mt-2">Belum ada pengumuman terbaru</p>
+                            <a href="/student/announcements" class="btn btn-primary">
+                                <i class="bi bi-search me-2"></i>Cari Pengumuman
+                            </a>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
     </div>
-    <?php endif; ?>
 
-    <!-- Quick Links -->
-    <div class="row">
-        <div class="col-12">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">
-                        <i class="fas fa-link"></i> Menu Cepat
-                    </h6>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-3 mb-3">
-                            <a href="/dosen/announcements/create" class="btn btn-success btn-block">
-                                <i class="fas fa-plus-circle"></i><br>
-                                Buat Pengumuman Baru
-                            </a>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <a href="/dosen/announcements" class="btn btn-info btn-block">
-                                <i class="fas fa-list"></i><br>
-                                Kelola Pengumuman
-                            </a>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <a href="/dosen/profile" class="btn btn-warning btn-block">
-                                <i class="fas fa-user-edit"></i><br>
-                                Edit Profil
-                            </a>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <a href="/help" class="btn btn-secondary btn-block">
-                                <i class="fas fa-question-circle"></i><br>
-                                Bantuan
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+
 </div>
 
 <style>
-.card {
-    transition: transform 0.2s;
+.timeline {
+    position: relative;
+    padding-left: 30px;
 }
 
-.card:hover {
-    transform: translateY(-2px);
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 0;
+    bottom: 20px;
+    width: 2px;
+    background: #e3e6f0;
 }
 
-.btn-block {
+.timeline-item {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: -23px;
+    top: 0;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    color: #fff;
+}
+
+.timeline-content {
+    background: #fff;
     padding: 15px;
-    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-left: 3px solid #e3e6f0;
 }
 
-.btn-block i {
-    font-size: 1.5em;
-    margin-bottom: 5px;
+.border-left-primary {
+    border-left: 0.25rem solid #198754 !important;
+}
+
+.border-left-success {
+    border-left: 0.25rem solid #198754 !important;
+}
+
+.border-left-info {
+    border-left: 0.25rem solid #0dcaf0 !important;
+}
+
+.border-left-warning {
+    border-left: 0.25rem solid #ffc107 !important;
+}
+
+.border-left-danger {
+    border-left: 0.25rem solid #dc3545 !important;
+}
+
+.list-group-item {
+    border: none;
+    padding: 0.75rem 0;
+}
+
+.list-group-item:hover {
+    background-color: #f8f9fc;
+}
+
+.btn-group .btn {
+    margin-right: 2px;
+}
+
+.btn-group .btn:last-child {
+    margin-right: 0;
 }
 </style>
