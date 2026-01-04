@@ -1,335 +1,297 @@
 <?php
-// Admin Dashboard - Updated untuk konsistensi
+/**
+ * Dashboard Dosen View
+ * Halaman dashboard khusus untuk dosen
+ */
+
+$page_title = $page_title ?? 'Dashboard Dosen';
+$user = $user ?? [];
+$stats = $stats ?? [];
+$active_menu = $active_menu ?? 'dashboard';
 ?>
 
 <div class="container-fluid">
     <!-- Page Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h1 class="h3 mb-0 text-gray-800">
-                <i class="bi bi-speedometer2 me-2"></i>Dashboard Admin
-            </h1>
-            <p class="mb-0 text-muted">Panel kontrol administrasi APAO</p>
-        </div>
-        <div class="btn-toolbar">
-            <div class="btn-group me-2">
-                <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
-                    <i class="bi bi-calendar3 me-1"></i>Periode
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Hari ini</a></li>
-                    <li><a class="dropdown-item" href="#">Minggu ini</a></li>
-                    <li><a class="dropdown-item" href="#">Bulan ini</a></li>
-                </ul>
-            </div>
-            <button type="button" class="btn btn-sm btn-primary" onclick="location.reload()">
-                <i class="bi bi-arrow-clockwise me-1"></i>Refresh
-            </button>
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">
+            <i class="fas fa-tachometer-alt"></i> Dashboard Dosen
+        </h1>
+        <div class="text-muted">
+            <i class="fas fa-clock"></i> <?= date('d F Y, H:i') ?>
         </div>
     </div>
-    <!-- User Management Stats -->
-    <div class="row mb-4">
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-primary shadow h-100 py-2">
+
+    <!-- Welcome Card -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-left-primary shadow mb-4">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Total Pengguna
+                                Selamat Datang
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                <?php echo $stats['total_users'] ?? 0; ?>
+                                <?= htmlspecialchars($user['full_name'] ?? $user['username'] ?? 'Dosen') ?>
                             </div>
+                            <div class="text-muted">
+                                <i class="fas fa-user-tie"></i> Dosen
+                                <?php if (isset($stats['user_info']['program_studi']) && !empty($stats['user_info']['program_studi'])): ?>
+                                    | <?= htmlspecialchars($stats['user_info']['program_studi']) ?>
+                                <?php endif; ?>
+                            </div>
+                            <?php if (isset($stats['academic_status'])): ?>
+                                <div class="mt-2">
+                                    <span class="badge badge-<?= $stats['academic_status'] === 'Aktif' ? 'success' : 'warning' ?>">
+                                        Status: <?= htmlspecialchars($stats['academic_status']) ?>
+                                    </span>
+                                </div>
+                            <?php endif; ?>
                         </div>
                         <div class="col-auto">
-                            <i class="bi bi-people fa-2x text-gray-300"></i>
+                            <i class="fas fa-user-graduate fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row">
+        <!-- Total Pengumuman Saya -->
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-success shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Mahasiswa
+                                Pengumuman Saya
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                <?php echo $stats['user_stats']['total_mahasiswa'] ?? 0; ?>
+                                <?= $stats['my_total_announcements'] ?? 0 ?>
                             </div>
                         </div>
                         <div class="col-auto">
-                            <i class="bi bi-mortarboard fa-2x text-gray-300"></i>
+                            <i class="fas fa-bullhorn fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        
+
+        <!-- Quick Actions -->
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-info shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                Dosen
+                                Aksi Cepat
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                <?php echo $stats['user_stats']['total_dosen'] ?? 0; ?>
+                            <div class="mt-2">
+                                <a href="/dosen/announcements/create" class="btn btn-info btn-sm">
+                                    <i class="fas fa-plus"></i> Buat Pengumuman
+                                </a>
                             </div>
                         </div>
                         <div class="col-auto">
-                            <i class="bi bi-person-badge fa-2x text-gray-300"></i>
+                            <i class="fas fa-plus-circle fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        
+
+        <!-- Profile Status -->
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-warning shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                Total Pengumuman
+                                Profil
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                <?php echo $stats['total_announcements'] ?? 0; ?>
+                            <div class="mt-2">
+                                <a href="/dosen/profile" class="btn btn-warning btn-sm">
+                                    <i class="fas fa-user-edit"></i> Edit Profil
+                                </a>
                             </div>
                         </div>
                         <div class="col-auto">
-                            <i class="bi bi-megaphone fa-2x text-gray-300"></i>
+                            <i class="fas fa-user-cog fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Menu Pengumuman -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-secondary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">
+                                Kelola Pengumuman
+                            </div>
+                            <div class="mt-2">
+                                <a href="/dosen/announcements" class="btn btn-secondary btn-sm">
+                                    <i class="fas fa-list"></i> Lihat Semua
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Recent Announcements -->
+    <?php if (isset($stats['recent_announcements']) && !empty($stats['recent_announcements'])): ?>
     <div class="row">
-        <!-- User Management Actions -->
-        <div class="col-lg-12 mb-4">
-            <div class="card shadow">
+        <div class="col-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        <i class="fas fa-newspaper"></i> Pengumuman Terbaru
+                    </h6>
+                    <a href="/dosen/announcements" class="btn btn-primary btn-sm">
+                        <i class="fas fa-eye"></i> Lihat Semua
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Judul</th>
+                                    <th>Penulis</th>
+                                    <th>Prioritas</th>
+                                    <th>Tanggal</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach (array_slice($stats['recent_announcements'], 0, 5) as $announcement): ?>
+                                <tr>
+                                    <td>
+                                        <strong><?= htmlspecialchars($announcement['title']) ?></strong>
+                                        <?php if (strlen($announcement['content']) > 100): ?>
+                                            <br><small class="text-muted">
+                                                <?= htmlspecialchars(substr(strip_tags($announcement['content']), 0, 100)) ?>...
+                                            </small>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td><?= htmlspecialchars($announcement['author_name'] ?? 'Unknown') ?></td>
+                                    <td>
+                                        <?php
+                                        $priority_class = '';
+                                        $priority_text = '';
+                                        switch($announcement['priority']) {
+                                            case 'high':
+                                                $priority_class = 'badge-danger';
+                                                $priority_text = 'Tinggi';
+                                                break;
+                                            case 'medium':
+                                                $priority_class = 'badge-warning';
+                                                $priority_text = 'Sedang';
+                                                break;
+                                            case 'low':
+                                                $priority_class = 'badge-info';
+                                                $priority_text = 'Rendah';
+                                                break;
+                                            default:
+                                                $priority_class = 'badge-secondary';
+                                                $priority_text = 'Normal';
+                                        }
+                                        ?>
+                                        <span class="badge <?= $priority_class ?>"><?= $priority_text ?></span>
+                                    </td>
+                                    <td>
+                                        <small>
+                                            <?= date('d/m/Y H:i', strtotime($announcement['created_at'])) ?>
+                                        </small>
+                                    </td>
+                                    <td>
+                                        <?php if ($announcement['is_active']): ?>
+                                            <span class="badge badge-success">Aktif</span>
+                                        <?php else: ?>
+                                            <span class="badge badge-secondary">Nonaktif</span>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php endif; ?>
+
+    <!-- Quick Links -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow mb-4">
                 <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-primary">
-                        <i class="bi bi-people me-2"></i>Manajemen Pengguna
+                        <i class="fas fa-link"></i> Menu Cepat
                     </h6>
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-3 mb-2">
-                            <a href="/admin/users" class="btn btn-primary w-100">
-                                <i class="bi bi-people me-2"></i>Kelola Pengguna
+                        <div class="col-md-3 mb-3">
+                            <a href="/dosen/announcements/create" class="btn btn-success btn-block">
+                                <i class="fas fa-plus-circle"></i><br>
+                                Buat Pengumuman Baru
                             </a>
                         </div>
-                        <div class="col-md-3 mb-2">
-                            <a href="/admin/users/create" class="btn btn-success w-100">
-                                <i class="bi bi-person-plus me-2"></i>Tambah Pengguna
+                        <div class="col-md-3 mb-3">
+                            <a href="/dosen/announcements" class="btn btn-info btn-block">
+                                <i class="fas fa-list"></i><br>
+                                Kelola Pengumuman
                             </a>
                         </div>
-                        <div class="col-md-3 mb-2">
-                            <a href="/admin/announcements" class="btn btn-info w-100">
-                                <i class="bi bi-megaphone me-2"></i>Kelola Pengumuman
+                        <div class="col-md-3 mb-3">
+                            <a href="/dosen/profile" class="btn btn-warning btn-block">
+                                <i class="fas fa-user-edit"></i><br>
+                                Edit Profil
                             </a>
                         </div>
-                        <div class="col-md-3 mb-2">
-                            <button class="btn btn-warning w-100" onclick="showUserStats()">
-                                <i class="bi bi-graph-up me-2"></i>Statistik Pengguna
-                            </button>
+                        <div class="col-md-3 mb-3">
+                            <a href="/help" class="btn btn-secondary btn-block">
+                                <i class="fas fa-question-circle"></i><br>
+                                Bantuan
+                            </a>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- User Management Table -->
-    <div class="row">
-        <!-- Recent Users -->
-        <div class="col-lg-12 mb-4">
-            <div class="card shadow">
-                <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                    <h6 class="m-0 font-weight-bold text-primary">
-                        <i class="bi bi-people me-2"></i>Pengguna Terbaru
-                    </h6>
-                    <a href="/admin/users" class="btn btn-sm btn-primary">
-                        Lihat Semua
-                    </a>
-                </div>
-                <div class="card-body">
-                    <?php if (!empty($stats['recent_users'])): ?>
-                        <?php foreach (array_slice($stats['recent_users'], 0, 5) as $user): ?>
-                            <div class="d-flex align-items-start mb-3 pb-3 border-bottom">
-                                <div class="flex-shrink-0 me-3">
-                                    <div class="bg-<?php echo ($user['role'] === 'admin') ? 'danger' : (($user['role'] === 'dosen') ? 'info' : 'success'); ?> rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                                        <i class="bi bi-person text-white"></i>
-                                    </div>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <div class="d-flex justify-content-between align-items-start">
-                                        <div>
-                                            <h6 class="mb-1"><?php echo htmlspecialchars($user['full_name']); ?></h6>
-                                            <p class="mb-1 text-muted small"><?php echo htmlspecialchars($user['email']); ?></p>
-                                            <small class="text-muted">
-                                                <i class="bi bi-calendar me-1"></i><?php echo date('d/m/Y', strtotime($user['created_at'])); ?>
-                                            </small>
-                                        </div>
-                                        <div class="d-flex flex-column align-items-end">
-                                            <span class="badge bg-<?php echo ($user['role'] === 'admin') ? 'danger' : (($user['role'] === 'dosen') ? 'info' : 'success'); ?> mb-2">
-                                                <?php echo ucfirst($user['role']); ?>
-                                            </span>
-                                            <div class="btn-group" role="group">
-                                                <a href="/admin/users/<?php echo $user['id']; ?>" 
-                                                   class="btn btn-sm btn-outline-info" title="Lihat Detail">
-                                                    <i class="bi bi-eye"></i>
-                                                </a>
-                                                <a href="/admin/users/<?php echo $user['id']; ?>/edit" 
-                                                   class="btn btn-sm btn-outline-primary" title="Edit">
-                                                    <i class="bi bi-pencil"></i>
-                                                </a>
-                                                <?php if ($user['id'] != $_SESSION['user_id']): ?>
-                                                <button type="button" 
-                                                        class="btn btn-sm btn-outline-danger" 
-                                                        title="Hapus"
-                                                        onclick="confirmDeleteUser(<?php echo $user['id']; ?>, '<?php echo htmlspecialchars($user['full_name']); ?>')">
-                                                    <i class="bi bi-trash"></i>
-                                                </button>
-                                                <?php endif; ?>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <div class="text-center py-4">
-                            <i class="bi bi-people text-muted" style="font-size: 3rem;"></i>
-                            <p class="text-muted mt-2">Belum ada pengguna terdaftar</p>
-                        </div>
-                    <?php endif; ?>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<!-- Admin JavaScript - User Management Focus -->
-<script>
-// User Management Functions
-function showUserStats() {
-    Swal.fire({
-        title: 'Statistik Pengguna',
-        html: `
-            <div class="text-start">
-                <p><strong>Total Pengguna:</strong> <?php echo $stats['total_users'] ?? 0; ?></p>
-                <p><strong>Mahasiswa:</strong> <?php echo $stats['user_stats']['total_mahasiswa'] ?? 0; ?></p>
-                <p><strong>Dosen:</strong> <?php echo $stats['user_stats']['total_dosen'] ?? 0; ?></p>
-                <p><strong>Admin:</strong> <?php echo $stats['user_stats']['total_admin'] ?? 0; ?></p>
-                <p><strong>Pengguna Aktif:</strong> <?php echo $stats['user_stats']['active_users'] ?? 0; ?></p>
-            </div>
-        `,
-        icon: 'info',
-        confirmButtonText: 'OK'
-    });
-}
-
-function toggleUserStatus(userId) {
-    Swal.fire({
-        title: 'Ubah Status User',
-        text: 'Apakah Anda yakin ingin mengubah status user ini?',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'Ya, Ubah',
-        cancelButtonText: 'Batal'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Implementation for toggling user status
-            window.showSuccess('Status user berhasil diubah!');
-        }
-    });
-}
-
-function confirmDeleteUser(userId, userName) {
-    Swal.fire({
-        title: 'Hapus Pengguna',
-        html: `Apakah Anda yakin ingin menghapus pengguna <strong>${userName}</strong>?<br><small class="text-muted">Tindakan ini tidak dapat dibatalkan.</small>`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Ya, Hapus',
-        cancelButtonText: 'Batal',
-        confirmButtonColor: '#dc3545',
-        cancelButtonColor: '#6c757d'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            deleteUser(userId, userName);
-        }
-    });
-}
-
-function deleteUser(userId, userName) {
-    // Show loading
-    Swal.fire({
-        title: 'Menghapus...',
-        text: 'Sedang menghapus pengguna',
-        allowOutsideClick: false,
-        didOpen: () => {
-            Swal.showLoading();
-        }
-    });
-
-    // Create form and submit
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = '/admin/users/' + userId + '/delete';
-    
-    // Add CSRF token if available
-    const csrfInput = document.createElement('input');
-    csrfInput.type = 'hidden';
-    csrfInput.name = '_method';
-    csrfInput.value = 'DELETE';
-    form.appendChild(csrfInput);
-    
-    document.body.appendChild(form);
-    form.submit();
-}
-
-// Initialize admin dashboard
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Admin User Management Dashboard initialized');
-});
-</script>
 
 <style>
-.border-left-primary {
-    border-left: 0.25rem solid #dc3545 !important;
+.card {
+    transition: transform 0.2s;
 }
 
-.border-left-success {
-    border-left: 0.25rem solid #1cc88a !important;
+.card:hover {
+    transform: translateY(-2px);
 }
 
-.border-left-info {
-    border-left: 0.25rem solid #36b9cc !important;
+.btn-block {
+    padding: 15px;
+    text-align: center;
 }
 
-.border-left-warning {
-    border-left: 0.25rem solid #f6c23e !important;
-}
-
-.table th {
-    border-top: none;
-    font-weight: 600;
-    font-size: 0.875rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.btn-group .btn {
-    margin-right: 2px;
-}
-
-.btn-group .btn:last-child {
-    margin-right: 0;
+.btn-block i {
+    font-size: 1.5em;
+    margin-bottom: 5px;
 }
 </style>

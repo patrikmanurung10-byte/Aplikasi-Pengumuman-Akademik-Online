@@ -1,5 +1,5 @@
 <?php
-// Admin Profile Page
+// Dosen Profile Page
 // Layout ditentukan di controller
 ?>
 
@@ -7,25 +7,36 @@
     <!-- Page Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h1 class="h3 mb-0 text-gray-800">Profil Administrator</h1>
-            <p class="mb-0 text-muted">Kelola informasi profil administrator</p>
+            <h1 class="h3 mb-0 text-gray-800">Profil Dosen</h1>
+            <p class="mb-0 text-muted">Lengkapi dan perbarui data pribadi Anda</p>
         </div>
-        <a href="/admin/dashboard" class="btn btn-admin">
+        <a href="/dosen/dashboard" class="btn btn-dosen">
             <i class="bi bi-arrow-left me-2"></i>Kembali ke Dashboard
         </a>
     </div>
 
+    <!-- Info Alert -->
+    <div class="alert alert-info mb-4" role="alert">
+        <div class="d-flex align-items-center">
+            <i class="bi bi-info-circle me-3" style="font-size: 1.5rem;"></i>
+            <div>
+                <h6 class="alert-heading mb-1">Informasi Penting</h6>
+                <p class="mb-0">Silakan lengkapi data pribadi Anda dengan informasi yang akurat. Data ini akan digunakan untuk keperluan akademik dan komunikasi resmi.</p>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <!-- Profile Form -->
-        <div class="col-lg-8 col-md-12 mb-4">
+        <div class="col-lg-8">
             <div class="card shadow">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-danger">
+                    <h6 class="m-0 font-weight-bold text-primary">
                         <i class="bi bi-person-circle me-2"></i>Informasi Profil
                     </h6>
                 </div>
                 <div class="card-body">
-                    <form method="POST" action="/admin/profile/update" id="profileForm">
+                    <form method="POST" action="/dosen/profile/update" id="profileForm">
                         <input type="hidden" name="csrf_token" value="<?php echo \App\Core\Session::getCsrfToken(); ?>">
                         
                         <div class="row">
@@ -42,7 +53,7 @@
                                 <div class="form-text">Username tidak dapat diubah</div>
                             </div>
                         </div>
-                        
+
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
@@ -56,26 +67,35 @@
                                        value="<?php echo htmlspecialchars($user['phone'] ?? ''); ?>">
                             </div>
                         </div>
-                        
+
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="nip" class="form-label">NIP</label>
                                 <input type="text" class="form-control" id="nip" 
                                        value="<?php echo htmlspecialchars($user['nim_nip'] ?? '-'); ?>" disabled>
-                                <div class="form-text">Hubungi super admin untuk mengubah</div>
+                                <div class="form-text">Hubungi admin untuk mengubah</div>
                             </div>
                             
                             <div class="col-md-6 mb-3">
-                                <label for="role" class="form-label">Role</label>
-                                <input type="text" class="form-control" 
-                                       value="Administrator" disabled>
+                                <label for="program_studi" class="form-label">Program Studi</label>
+                                <select class="form-select" id="program_studi" name="program_studi">
+                                    <option value="">Pilih Program Studi</option>
+                                    <option value="Teknik Informatika" <?php echo ($user['program_studi'] ?? '') === 'Teknik Informatika' ? 'selected' : ''; ?>>Teknik Informatika</option>
+                                    <option value="Sistem Informasi" <?php echo ($user['program_studi'] ?? '') === 'Sistem Informasi' ? 'selected' : ''; ?>>Sistem Informasi</option>
+                                    <option value="Teknik Elektro" <?php echo ($user['program_studi'] ?? '') === 'Teknik Elektro' ? 'selected' : ''; ?>>Teknik Elektro</option>
+                                    <option value="Teknik Mesin" <?php echo ($user['program_studi'] ?? '') === 'Teknik Mesin' ? 'selected' : ''; ?>>Teknik Mesin</option>
+                                    <option value="Teknik Sipil" <?php echo ($user['program_studi'] ?? '') === 'Teknik Sipil' ? 'selected' : ''; ?>>Teknik Sipil</option>
+                                    <option value="Teknik Industri" <?php echo ($user['program_studi'] ?? '') === 'Teknik Industri' ? 'selected' : ''; ?>>Teknik Industri</option>
+                                    <option value="Manajemen Bisnis" <?php echo ($user['program_studi'] ?? '') === 'Manajemen Bisnis' ? 'selected' : ''; ?>>Manajemen Bisnis</option>
+                                    <option value="Akuntansi" <?php echo ($user['program_studi'] ?? '') === 'Akuntansi' ? 'selected' : ''; ?>>Akuntansi</option>
+                                </select>
                             </div>
                         </div>
-                        
+
                         <hr>
-                        
+
                         <div class="d-flex justify-content-end">
-                            <button type="submit" class="btn btn-admin">
+                            <button type="submit" class="btn btn-dosen">
                                 <i class="bi bi-check-circle me-2"></i>Simpan Perubahan
                             </button>
                         </div>
@@ -85,18 +105,18 @@
         </div>
 
         <!-- Profile Info & Actions -->
-        <div class="col-lg-4 col-md-12">
+        <div class="col-lg-4">
             <!-- Account Info -->
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-danger">
+                    <h6 class="m-0 font-weight-bold text-primary">
                         <i class="bi bi-info-circle me-2"></i>Informasi Akun
                     </h6>
                 </div>
                 <div class="card-body text-center">
                     <div class="mb-3">
                         <div class="user-avatar mx-auto" style="width: 80px; height: 80px; font-size: 2rem;">
-                            <?php echo strtoupper(substr($user['full_name'] ?? 'AD', 0, 2)); ?>
+                            <?php echo strtoupper(substr($user['full_name'] ?? 'DS', 0, 2)); ?>
                         </div>
                     </div>
                     
@@ -106,8 +126,12 @@
                             <td><strong><?php echo htmlspecialchars($user['username'] ?? '-'); ?></strong></td>
                         </tr>
                         <tr>
+                            <td class="text-muted">NIP:</td>
+                            <td><?php echo htmlspecialchars($user['nim_nip'] ?? '-'); ?></td>
+                        </tr>
+                        <tr>
                             <td class="text-muted">Role:</td>
-                            <td><span class="badge bg-admin">Administrator</span></td>
+                            <td><span class="badge" style="background-color: #0d6efd;">Dosen</span></td>
                         </tr>
                         <tr>
                             <td class="text-muted">Status:</td>
@@ -137,7 +161,7 @@
                     </h6>
                 </div>
                 <div class="card-body">
-                    <p class="text-muted small mb-3">Untuk mengubah password, gunakan fitur lupa password atau hubungi super admin.</p>
+                    <p class="text-muted small mb-3">Untuk mengubah password, gunakan fitur lupa password atau hubungi administrator.</p>
                     
                     <div class="d-grid gap-2">
                         <a href="/forgot-password" class="btn btn-outline-warning btn-sm">
@@ -153,21 +177,47 @@
             <!-- Quick Actions -->
             <div class="card shadow">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">
-                        <i class="bi bi-lightning me-2"></i>Aksi Cepat
+                    <h6 class="m-0 font-weight-bold text-info">
+                        <i class="bi bi-lightning me-2"></i>Panduan Pengisian Data
                     </h6>
                 </div>
                 <div class="card-body">
-                    <div class="d-grid gap-2">
-                        <a href="/admin/users" class="btn btn-outline-primary btn-sm">
-                            <i class="bi bi-people me-2"></i>Kelola Pengguna
+                    <div class="d-grid gap-2 mb-3">
+                        <a href="/dosen/announcements" class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-megaphone me-2"></i>Pengumuman Saya
                         </a>
-                        <a href="/admin/announcements" class="btn btn-outline-primary btn-sm">
-                            <i class="bi bi-megaphone me-2"></i>Kelola Pengumuman
+                        <a href="/dosen/announcements/create" class="btn btn-outline-success btn-sm">
+                            <i class="bi bi-plus-circle me-2"></i>Buat Pengumuman
                         </a>
-                        <a href="/admin/users/create" class="btn btn-outline-success btn-sm">
-                            <i class="bi bi-person-plus me-2"></i>Tambah Pengguna
+                        <a href="/dosen/dashboard" class="btn btn-outline-info btn-sm">
+                            <i class="bi bi-speedometer2 me-2"></i>Dashboard
                         </a>
+                    </div>
+                    
+                    <hr>
+                    
+                    <h6 class="text-primary mb-2">Mengapa Data Pribadi Penting?</h6>
+                    <ul class="list-unstyled mb-3 small">
+                        <li class="mb-2">
+                            <i class="bi bi-check-circle text-success me-2"></i>
+                            <strong>Komunikasi Resmi:</strong> Email dan telepon untuk koordinasi
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-check-circle text-success me-2"></i>
+                            <strong>Identifikasi:</strong> Data akurat untuk keperluan administrasi
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-check-circle text-success me-2"></i>
+                            <strong>Program Studi:</strong> Informasi sesuai bidang keahlian
+                        </li>
+                        <li class="mb-0">
+                            <i class="bi bi-check-circle text-success me-2"></i>
+                            <strong>Profesionalisme:</strong> Data lengkap untuk kredibilitas
+                        </li>
+                    </ul>
+                    
+                    <div class="alert alert-warning alert-sm p-2 mb-0">
+                        <small><i class="bi bi-exclamation-triangle me-1"></i> <strong>Catatan:</strong> Pastikan semua data yang Anda masukkan adalah benar dan dapat dipertanggungjawabkan.</small>
                     </div>
                 </div>
             </div>
