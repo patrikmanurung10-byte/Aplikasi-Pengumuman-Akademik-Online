@@ -1,0 +1,69 @@
+# APAO Polibatam - Root Security Configuration
+
+# Redirect all requests to public directory
+RewriteEngine On
+RewriteCond %{REQUEST_URI} !^/FRONTEND_IFMALAM1C-8/public/
+RewriteRule ^(.*)$ public/$1 [L]
+
+# Deny access to sensitive files and directories
+<Files "*.php">
+    <RequireAll>
+        Require all denied
+        Require uri /public/
+    </RequireAll>
+</Files>
+
+<Files "*.sql">
+    Require all denied
+</Files>
+
+<Files ".env">
+    Require all denied
+</Files>
+
+<Files "composer.json">
+    Require all denied
+</Files>
+
+<Files "composer.lock">
+    Require all denied
+</Files>
+
+# Deny access to directories
+<Directory "app">
+    Require all denied
+</Directory>
+
+<Directory "backend">
+    Require all denied
+</Directory>
+
+<Directory "controllers">
+    Require all denied
+</Directory>
+
+<Directory "models">
+    Require all denied
+</Directory>
+
+<Directory "views">
+    Require all denied
+</Directory>
+
+<Directory "includes">
+    Require all denied
+</Directory>
+
+<Directory "templates">
+    Require all denied
+</Directory>
+
+# Prevent directory browsing
+Options -Indexes
+
+# Security headers
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options nosniff
+    Header always set X-Frame-Options DENY
+    Header always set X-XSS-Protection "1; mode=block"
+</IfModule>

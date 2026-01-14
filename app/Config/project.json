@@ -1,0 +1,22 @@
+{
+  "project": {
+    "name": "APAO Polibatam",
+    "version": "1.0.0",
+    "description": "Aplikasi Pengumuman Akademik Online - Politeknik Negeri Batam",
+    "author": "Politeknik Negeri Batam",
+    "license": "MIT"
+  },
+  "paths": {
+    "assets": "assets/",
+    "images": "assets/images/",
+    "css": "assets/css/",
+    "js": "assets/js/",
+    "pages": "pages/"
+  },
+  "features": {
+    "authentication": true,
+    "dashboard": true,
+    "announcements": true,
+    "user_management": true
+  }
+}

@@ -1,0 +1,30 @@
+/* Main CSS file for APAO Polibatam */
+/* This file will contain shared styles across all pages */
+
+/* Global Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Common card styles */
+.card {
+    border: none;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border-radius: 15px;
+}
+
+/* Logo styles */
+.logo {
+    width: 120px;
+    display: block;
+    margin: 20px auto 10px;
+}
+
+/* Button styles */
+.btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    font-weight: 600;
+}
+
+/* Additional styles will be added here */
